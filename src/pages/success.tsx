@@ -1,3 +1,3 @@
 export default function Success() {
-  return (<div>Sucesso</div>)
+  return (<h1>Sucesso</h1>)
 }
