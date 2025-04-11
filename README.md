@@ -18,10 +18,10 @@ Este projeto utiliza as seguintes tecnologias:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/carlinhosantosjr/GitHub-Challenge
+git clone https://github.com/carlinhosantosjr/04-ignite-shop-challenge
 
 # Acesse a pasta do projeto
-cd GitHub-Challenge
+cd 04-ignite-shop-challenge
 
 # Instale as dependências
 npm install # ou yarn install
@@ -30,11 +30,11 @@ npm install # ou yarn install
 ## ▶️ Executando o projeto
 
 ```bash
-# Inicie o servidor de desenvolvimento
-npm run dev # ou yarn dev
+Gere o bundle do projeto com o comando 'npm run build'
+Após, execute o projeto em modo de produção com o comando 'npm run start'
 ```
 
-O projeto estará disponível em `http://localhost:5173/`.
+O projeto estará disponível em `http://localhost:3000/`.
 
 
 ## 📝 Licença
