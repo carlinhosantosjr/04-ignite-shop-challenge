@@ -7,6 +7,8 @@ interface ShoppingCartProviderProps {
 
 interface ShoppingCartContextType {
   addProduct: (product) => void
+  shoppingCart: ProductProps[]
+  removeProduct: (id) => void
 }
 
 export const ShoppingCartContext = createContext({} as ShoppingCartContextType)
@@ -14,14 +16,18 @@ export const ShoppingCartContext = createContext({} as ShoppingCartContextType)
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [shoppingCart, setShoppingCart] = useState<ProductProps[]>([])
 
-  function addProduct(produto) {
-    setShoppingCart((state) => [...state, produto])
-    console.log(shoppingCart)
+  function addProduct(product) {
+    setShoppingCart((state) => [...state, product])
+  }
+
+  function removeProduct(id) {
+    const novoArray = shoppingCart.filter(itemCart => itemCart.id !== id)
+    setShoppingCart(novoArray)
   }
 
   return (
     <ShoppingCartContext.Provider
-      value={{ addProduct }}
+      value={{ addProduct, shoppingCart, removeProduct }}
     >
       {children}
     </ShoppingCartContext.Provider>

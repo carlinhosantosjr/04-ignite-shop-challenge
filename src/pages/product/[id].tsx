@@ -5,54 +5,32 @@ import {
 } from '../../styles/pages/product'
 
 import { ShoppingCartContext } from '@/src/contexts/ShoppingCartContext'
+import { priceConverter } from '@/src/utils/priceConverter'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import Stripe from 'stripe'
 import { stripe } from '../../lib/stripe'
 
 export interface ProductProps {
-  product: {
-    id: string
-    name: string
-    imageUrl: string
-    price: string
-    description: string
-    defaultPriceId: string
-  }
+  id: string
+  name: string
+  imageUrl: string
+  price: string
+  description: string
+  defaultPriceId: string
 }
 
-export default function Product({ product }: ProductProps) {
-  const { addProduct } = useContext(ShoppingCartContext)
-  const [
-    isCreatingCheckoutSession,
-    setIsCreatingCheckoutSession,
-  ] = useState(false)
+export default function Product(product : ProductProps) {
+  const { addProduct, shoppingCart } = useContext(ShoppingCartContext)
+
+  const disableButton =
+    shoppingCart.some(itemCart => itemCart.id === product.id)
 
   function handleAddProduct() {
     addProduct(product)
   }
-
-  /* async function handleBuyButton() {
-    try {
-      setIsCreatingCheckoutSession(true)
-
-      const response = await axios.post('/api/checkout', {
-        priceId: product.defaultPriceId,
-      })
-
-      const { checkoutUrl } = response.data
-
-      window.location.href = checkoutUrl
-    } catch (err) {
-      setIsCreatingCheckoutSession(false)
-
-      alert(`${err} Falha ao redirecionar ao checkout!`)
-    } finally {
-      setIsCreatingCheckoutSession(false)
-    }
-  } */
 
   return (
     <>
@@ -71,10 +49,12 @@ export default function Product({ product }: ProductProps) {
           <p>{product.description}</p>
 
           <button
-            disabled={isCreatingCheckoutSession}
+            disabled={disableButton}
             onClick={handleAddProduct}
           >
-            Colocar na sacola
+            {disableButton
+              ? 'No carrinho'
+              : 'Colocar na sacola'}
           </button>
         </ProductDetails>
       </ProductContainer>
@@ -107,20 +87,15 @@ export const getStaticProps: GetStaticProps<unknown, { id: string }> =
 
     return {
       props: {
-        product: {
-          id: product.id,
-          name: product.name,
-          imageUrl: product.images[0],
-          price: price.unit_amount
-            ? new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }).format(price.unit_amount / 100)
-            : 0,
-          description: product.description,
-          defaultPriceId: price.id,
-        },
+        id: product.id,
+        name: product.name,
+        imageUrl: product.images[0],
+        price: price.unit_amount
+          ? priceConverter(price.unit_amount / 100)
+          : 0,
+        description: product.description,
+        defaultPriceId: price.id,
       },
-      revalidate: 60 * 60 * 1, // 1 hours
+      revalidate: 60 * 60 * 1,
     }
   }

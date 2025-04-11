@@ -30,7 +30,7 @@ export const Product = styled('div', {
     bottom: '0.25rem',
     left: '0.25rem',
     right: '0.25rem',
-    padding: '2rem',
+    padding: '1.5rem',
 
     borderRadius: 6,
 
@@ -54,6 +54,11 @@ export const Product = styled('div', {
       fontWeight: 'bold',
       color: '$green300',
     },
+  },
+  div: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.725rem',
   },
 
   '&:hover': {
